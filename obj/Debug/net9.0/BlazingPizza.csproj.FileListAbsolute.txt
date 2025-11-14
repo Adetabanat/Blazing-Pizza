@@ -213,3 +213,4 @@
 /Users/new/Library/CloudStorage/OneDrive-BYU-PathwayWorldwide/Blazing-Pizza/obj/Debug/net9.0/BlazingPizza.pdb
 /Users/new/Library/CloudStorage/OneDrive-BYU-PathwayWorldwide/Blazing-Pizza/obj/Debug/net9.0/BlazingPizza.genruntimeconfig.cache
 /Users/new/Library/CloudStorage/OneDrive-BYU-PathwayWorldwide/Blazing-Pizza/obj/Debug/net9.0/ref/BlazingPizza.dll
+/Users/new/Library/CloudStorage/OneDrive-BYU-PathwayWorldwide/Blazing-Pizza/obj/Debug/net9.0/BlazingPizza.sourcelink.json

@@ -15,23 +15,23 @@
     }
     else
     {
-        <div class="list-group orders-list">
+        <div class="orders-grid">
             @foreach (var item in ordersWithStatus)
             {
-                <div class="list-group-item">
-                    <div class="col">
+                <div class="order-card">
+                    <div class="order-info">
                         <h5>@item.Order.CreatedTime.ToLongDateString()</h5>
                         Items:
                         <strong>@item.Order.Pizzas.Count()</strong>;
                         Total price:
                         <strong>GH₵@item.Order.GetFormattedTotalPrice()</strong>
                     </div>
-                    <div class="col">
+                    <div class="order-status">
                         Status: <strong>@item.StatusText</strong>
                     </div>
                     @if (@item.StatusText != "Delivered")
                     {
-                        <div class="col flex-grow-0">
+                        <div class="order-actions">
                             <NavLink href=@($"myorders/{item.Order.OrderId}") class="btn btn-success">
                                 Track &gt;
                             </NavLink>
@@ -40,25 +40,63 @@
                 </div>
             }
         </div>
+
+        <style>
+            .orders-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 1rem;
+                margin: 1rem 0;
+            }
+
+            .order-card {
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 0.5rem;
+                padding: 1rem;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+
+            .order-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            }
+
+            .order-info h5 {
+                margin-top: 0;
+                margin-bottom: 0.5rem;
+            }
+
+            .order-status {
+                margin: 0.75rem 0;
+            }
+
+            .order-actions {
+                margin-top: 1rem;
+            }
+        </style>
     }
 </div>
 
-<div class="sidebar">
+<div class="sidebar sidebar-no-scroll">
     @if (order.Pizzas.Any())
     {
-        <div class="order-contents">
+        <div class="order-contents order-contents-compact">
             <h2>Your order</h2>
 
-            @foreach (var configuredPizza in order.Pizzas)
-            {
-              <div class="cart-item">
-                  <div class="title">@(configuredPizza.Size)" @configuredPizza.Special.Name</div>
-                  <div class="item-price">
-                      @configuredPizza.GetFormattedTotalPrice()
+            <div class="pizza-grid-compact">
+                @foreach (var configuredPizza in order.Pizzas)
+                {
+                  <div class="cart-item cart-item-compact">
+                      <div class="title">@(configuredPizza.Size)" @configuredPizza.Special.Name</div>
+                      <div class="item-price">
+                          @configuredPizza.GetFormattedTotalPrice()
+                      </div>
+                      <a @onclick="@(() => OrderState.RemoveConfiguredPizza(configuredPizza))" class="delete-item">x</a>
                   </div>
-                  <a @onclick="@(() => OrderState.RemoveConfiguredPizza(configuredPizza))" class="delete-item">x</a>
-              </div>
-            }
+                }
+            </div>
         </div>
     }
     else
@@ -74,6 +112,46 @@
         </a>
     </div>
 </div>
+
+<style>
+    .sidebar-no-scroll {
+        overflow: hidden;
+        height: calc(100vh - 5rem - 3rem);
+    }
+
+    .order-contents-compact {
+        max-height: calc(100vh - 5rem - 3rem - 4rem);
+        overflow: hidden;
+        padding: 1rem 1.5rem;
+    }
+
+    .order-contents-compact h2 {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .pizza-grid-compact {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.5rem;
+        max-height: calc(100vh - 5rem - 3rem - 4rem - 3rem);
+        overflow-y: auto;
+    }
+
+    .cart-item-compact {
+        padding: 0.5rem 0.75rem;
+        margin-top: 0;
+        font-size: 0.85rem;
+    }
+
+    .cart-item-compact .title {
+        font-size: 0.9rem;
+    }
+
+    .cart-item-compact .item-price {
+        font-size: 0.85rem;
+    }
+</style>
 
 @code {
     List<OrderWithStatus> ordersWithStatus = new List<OrderWithStatus>();
